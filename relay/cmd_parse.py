@@ -12,8 +12,12 @@ class CMDParse:
         parser = self.setup_argparse()
         namespace = parser.parse_args(self.argv)
         relay_number = int(namespace.relay_number)
-        state = namespace.state if namespace.state != "None" else None
+        state = namespace.state
 
+        if state == "on":
+            relay_controller.Relay().on(relay_number)
+        else:
+            relay_controller.Relay().off(relay_number)
 
     def setup_argparse(self) -> argparse.ArgumentParser:
         description = "Set of commands to control the relay"
