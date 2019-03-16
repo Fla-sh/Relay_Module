@@ -32,14 +32,18 @@ class Relay:
         self.setup_switch()
 
     def on(self, relay_number):
-        pin_number = self.relay_number_to_GPIO[self.command.relay_number]
-        state = self.relay_state_to_logical_state[self.command.state]
+        state = "on"
+        pin_number = self.relay_number_to_GPIO[relay_number]
+        state = self.relay_state_to_logical_state[state]
+        self.set_pin_to_out(pin_number)
         GPIO.output(pin_number, state)
         print("Switched pin {} to {}".format(pin_number, GPIO.input(pin_number)))
 
     def off(self, relay_number):
-        pin_number = self.relay_number_to_GPIO[self.command.relay_number]
-        state = self.relay_state_to_logical_state[self.command.state]
+        state = "off"
+        pin_number = self.relay_number_to_GPIO[relay_number]
+        state = self.relay_state_to_logical_state[state]
+        self.set_pin_to_out(pin_number)
         GPIO.output(pin_number, state)
         print("Switched pin {} to {}".format(pin_number, GPIO.input(pin_number)))
 
