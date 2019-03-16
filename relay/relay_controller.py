@@ -1,30 +1,8 @@
 import RPi.GPIO as GPIO
 
-"""
-def change(pin):
-    GPIO.output(pin, not GPIO.input(pin))
-    print("Changed pin no. {}".format(pin))
-    print("New state is: {}".format(str(GPIO.input(pin))))
-
-
-def setup():
-    print(GPIO.VERSION)
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(list(range(1, 28)), GPIO.OUT)
-    GPIO.output(list(range(1, 28)), GPIO.HIGH)
-
-
-setup()
-# while True:
-#    chanel = int(input("Chanel number"))
-#    change(chanel)
-"""
-
 
 class Relay:
-
-    def __init__(self, command):
-        self.command = command
+    def __init__(self):
         self.relay_number_to_GPIO = {
             1 : 4,
             2 : 14,
@@ -53,31 +31,17 @@ class Relay:
         }
         self.setup_switch()
 
-    def parse(self):
+    def on(self, relay_number):
         pin_number = self.relay_number_to_GPIO[self.command.relay_number]
-        if self.command.mode == "set":
-            state = self.relay_state_to_logical_state[self.command.state]
-            self.switch(pin_number, state)
-            print("Switched relay no. {} on pin no. {} to state {} and is now in sate {}".format(self.command.relay_number, pin_number, state, self.command.state))
-        elif self.command.mode == "state":
-            #print(self.logical_state_to_relay_state[self.state(pin_number)])
-            print("Not implemented")
+        state = self.relay_state_to_logical_state[self.command.state]
+        GPIO.output(pin_number, state)
+        print("Switched pin {} to {}".format(pin_number, GPIO.input(pin_number)))
 
-    def switch(self, pin_number, state=None):
-        self.set_pin_to_out(pin_number)
-        if state is None:
-            GPIO.output(pin_number, not GPIO.input(pin_number))
-            print("Switched pin {} to {}".format(pin_number, GPIO.input(pin_number)))
-        else:
-            if state == 1:
-                GPIO.output(pin_number, state)
-                print("Switched pin {} to {}".format(pin_number, GPIO.input(pin_number)))
-            elif state == 0:
-                GPIO.output(pin_number, state)
-                print("Switched pin {} to {}".format(pin_number, GPIO.input(pin_number)))
-
-            else:
-                print("State {} is wrong".format(state))
+    def off(self, relay_number):
+        pin_number = self.relay_number_to_GPIO[self.command.relay_number]
+        state = self.relay_state_to_logical_state[self.command.state]
+        GPIO.output(pin_number, state)
+        print("Switched pin {} to {}".format(pin_number, GPIO.input(pin_number)))
 
     #def set_state(self, pin_number, state):
 
